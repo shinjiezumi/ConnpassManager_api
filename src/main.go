@@ -9,6 +9,9 @@ import (
 	"os"
 )
 
+// APIポート
+const apiPort = 1323
+
 func main() {
 	e := echo.New()
 
@@ -30,9 +33,5 @@ func main() {
 		return c.String(http.StatusOK, "ok")
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", port)))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", apiPort)))
 }

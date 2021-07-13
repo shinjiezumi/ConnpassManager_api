@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     ports:
-      - 8080:8080
+      - 1323:1323
       - 2345:2345
     security_opt:
       - apparmor:unconfined
