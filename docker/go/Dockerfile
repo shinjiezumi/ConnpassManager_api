@@ -5,6 +5,8 @@ RUN apt-get update
 WORKDIR /go/src
 COPY ./src /go/src
 
+RUN mkdir -p /var/log/connpass-manager/
+
 RUN go build -o go \
     && go get github.com/oxequa/realize \
     && go get -u github.com/go-delve/delve/cmd/dlv \

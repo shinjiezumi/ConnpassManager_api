@@ -16,7 +16,8 @@ services:
     cap_add:
       - SYS_PTRACE
     volumes:
-        - ./src:/go/src
+      - ./src:/go/src
+      - ./logs/go:/var/log/webapps/connpass-manager/
     tty:
       true
     environment:
