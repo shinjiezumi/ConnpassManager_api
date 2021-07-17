@@ -70,5 +70,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           port: ${{ secrets.SSH_PORT }}
+          #          script: |
+          #            bash deploy_connpass-manager.sh
           script: |
-            bash deploy_connpass-manager.sh
+            pwd >> pwd.log
+            whoami >> whoami.log
+            go version >> goversion.log
