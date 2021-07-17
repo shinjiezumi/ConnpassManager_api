@@ -30,7 +30,7 @@ func main() {
 
 	// ROOT
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "ok!")
+		return c.String(http.StatusOK, "ok!!")
 	})
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", apiPort)))
