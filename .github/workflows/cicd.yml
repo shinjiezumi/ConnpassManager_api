@@ -73,6 +73,4 @@ jobs:
           #          script: |
           #            bash deploy_connpass-manager.sh
           script: |
-            pwd >> pwd.log
-            whoami >> whoami.log
-            go version >> goversion.log
+            env >> env.log
