@@ -71,7 +71,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            pwd
-            whoami
-            go version
-
+            bash deploy_connpass-manager.sh
