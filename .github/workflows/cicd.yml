@@ -70,7 +70,8 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USERNAME }}
         run: |
-          ssh $SSH_USER@$SSH_HOST -i $SSH_KEY -p $SSH_PORT
+          echo $SSH_KEY > key
+          ssh $SSH_USER@$SSH_HOST -i ./key -p $SSH_PORT
           bash scripts/deploy.sh
 #      - name: Install SSH Key and Deploy
 #        uses: appleboy/ssh-action@master
