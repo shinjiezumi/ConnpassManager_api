@@ -63,17 +63,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      #      - name: SSH and Deploy
-      #        env:
-      #          SSH_KEY: ${{ secrets.SSH_KEY }}
-      #          SSH_HOST: ${{ secrets.SSH_HOST }}
-      #          SSH_PORT: ${{ secrets.SSH_PORT }}
-      #          SSH_USER: ${{ secrets.SSH_USERNAME }}
-      #        shell: bash
-      #        run: |
-      #          echo "$SSH_KEY" > secret_key
-      #          chmod 600 secret_key
-      #          ssh ${SSH_USER}@${SSH_HOST} -i secret_key -p ${SSH_PORT} "bash deploy_connpass-manager.sh" -o StrictHostKeyChecking=no
       - name: Install SSH Key and Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -82,8 +71,12 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            bash deploy_connpass-manager.sh
-#          script: |
-#            env >> env.log
-#            exec $SHELL -l
-#            env >> env2.log
+            export PATH
+            export PATH="$HOME/.anyenv/bin:$PATH"
+            eval "$(anyenv init -)"
+
+            cd /usr/share/nginx/html/webapps/go/connpass-manager_api
+            git pull
+            cd src
+            go build -o ./api main.go
+            sudo supervisorctl restart connpass-manager
