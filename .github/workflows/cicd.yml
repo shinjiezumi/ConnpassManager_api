@@ -63,16 +63,25 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Install SSH Key and Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          port: ${{ secrets.SSH_PORT }}
-          #          script: |
-          #            bash deploy_connpass-manager.sh
-          script: |
-            env >> env.log
-            exec $SHELL -l
-            env >> env2.log
+      - name: SSH and Deploy
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USERNAME }}
+        run: |
+          ssh $SSH_USER@$SSH_HOST -i $SSH_KEY -p $SSH_PORT
+          bash scripts/deploy.sh
+#      - name: Install SSH Key and Deploy
+#        uses: appleboy/ssh-action@master
+#        with:
+#          key: ${{ secrets.SSH_KEY }}
+#          host: ${{ secrets.SSH_HOST }}
+#          username: ${{ secrets.SSH_USERNAME }}
+#          port: ${{ secrets.SSH_PORT }}
+#          #          script: |
+#          #            bash deploy_connpass-manager.sh
+#          script: |
+#            env >> env.log
+#            exec $SHELL -l
+#            env >> env2.log
