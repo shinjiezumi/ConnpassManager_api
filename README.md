@@ -1,1 +1,1 @@
-# ConnpassManager_api
+# connpass-manager_api

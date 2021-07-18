@@ -1,0 +1,42 @@
+version: '3.5'
+
+services:
+  go:
+    build:
+      context: .
+      dockerfile: docker/go/Dockerfile
+      target: build
+    depends_on:
+      - db
+    ports:
+      - 1323:1323
+      - 2345:2345
+    security_opt:
+      - apparmor:unconfined
+    cap_add:
+      - SYS_PTRACE
+    volumes:
+      - ./src:/go/src
+      - ./logs/go:/var/log/webapps/connpass-manager/
+    tty:
+      true
+    environment:
+      APP_ENV: local
+      TZ: Asia/Tokyo
+      DBMS: mysql
+      DB_PROTOCOL: tcp(db:3306)
+      DB_NAME: echodock
+      DB_USER: root
+      DB_PASSWORD: root
+  db:
+    build: docker/mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./logs/mysql:/var/log/mysql
+    environment:
+      MYSQL_DATABASE: connpass_manager
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Tokyo

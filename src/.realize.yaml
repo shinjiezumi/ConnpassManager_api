@@ -1,0 +1,25 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+  - name: connpass-manager
+    path: .
+    commands:
+      install:
+        status: true
+        method: go build -o /tmp/api main.go
+      run:
+        status: true
+        method: /tmp/api
+    watcher:
+      extensions:
+        - go
+        - html
+      paths:
+        - /
+      ignore:
+        paths:
+          - .git
+          - .realize
+          - vendor

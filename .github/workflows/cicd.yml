@@ -1,0 +1,82 @@
+name: connpass-manager
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+    container: circleci/golang:1.15.12-buster-browsers-legacy
+
+    env:
+      DB_PROTOCOL: tcp(localhost:3306)
+      DB_NAME: echodock
+      DB_USER: root
+      DB_PASSWORD: pass
+
+    services:
+      db:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: echodock
+          MYSQL_ROOT_PASSWORD: pass
+        ports:
+          - 3306:3306
+
+    steps:
+      # checkout
+      - name: Setup file system permissions
+        run: sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
+      - uses: actions/checkout@v2
+
+      # setup libraries
+      - name: Setup Libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install default-mysql-client
+
+      # setup database
+      #      - name: Setup database
+      #        working-directory: ./src
+      #        run: |
+      #          go get github.com/rubenv/sql-migrate/...
+      #          sql-migrate up
+
+      # build and run test
+      - name: Build
+        working-directory: ./src
+        run: go build -v ./...
+      - name: Test
+        working-directory: ./src
+        run: go test -race -v ./...
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Install SSH Key and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            export PATH
+            export PATH="$HOME/.anyenv/bin:$PATH"
+            eval "$(anyenv init -)"
+
+            cd /usr/share/nginx/html/webapps/go/connpass-manager_api
+            git pull
+            cd src
+            go build -o ./api main.go
+            sudo supervisorctl restart connpass-manager
