@@ -74,3 +74,5 @@ jobs:
           #            bash deploy_connpass-manager.sh
           script: |
             env >> env.log
+            exec $SHELL -l
+            env >> env2.log
