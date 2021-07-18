@@ -71,9 +71,9 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USERNAME }}
         shell: bash
         run: |
-          echo $SSH_KEY > key
-          ssh $SSH_USER@$SSH_HOST -i ./key -p $SSH_PORT
-          bash scripts/deploy.sh
+          echo "$SSH_KEY" > secret_key
+          chmod 600 secret_key
+          ssh ${SSH_USER}@${SSH_HOST} -i secret_key -p ${SSH_PORT} "bash deploy_connpass-manager.sh" -o StrictHostKeyChecking=no
 #      - name: Install SSH Key and Deploy
 #        uses: appleboy/ssh-action@master
 #        with:
