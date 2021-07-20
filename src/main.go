@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"connpass-manager/db"
 	"connpass-manager/logger"
 )
 
@@ -28,9 +29,12 @@ func main() {
 	logger.Setup(e)
 	e.Use(middleware.Recover())
 
+	// データベースセットアップ
+	db.Initialize()
+
 	// ROOT
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "ok!")
+		return c.String(http.StatusOK, "connpass-manager")
 	})
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", apiPort)))
