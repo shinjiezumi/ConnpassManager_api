@@ -5,6 +5,9 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+
+	"connpass-manager/config"
 )
 
 var connection *gorm.DB
@@ -20,6 +23,11 @@ func Initialize() {
 	conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
+	}
+
+	// ローカル環境ではSQLログを有効にする
+	if config.GetAppEnv().IsLocal() {
+		conn.Logger.LogMode(logger.Info)
 	}
 
 	connection = conn
