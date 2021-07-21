@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"connpass-manager/api/user"
 	"connpass-manager/config"
 	"connpass-manager/db"
 	"connpass-manager/logger"
@@ -38,6 +39,8 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "connpass-manager")
 	})
+
+	user.SetupRoutes(e)
 
 	log.Println(fmt.Sprintf("start api at %s env", config.GetAppEnv()))
 
