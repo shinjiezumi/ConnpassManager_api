@@ -4,6 +4,9 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+
+	"connpass-manager/db"
+	"connpass-manager/usecase/user"
 )
 
 // Login ログイン処理を行う
@@ -18,7 +21,20 @@ func Logout(c echo.Context) error {
 
 // Register 会員登録を行う
 func Register(c echo.Context) error {
-	return c.String(http.StatusOK, "Register")
+	req := new(user.RegisterRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	// ユースケース実行
+	if err := user.NewRegisterUseCase(db.GetConnection()).Execute(req); err != nil {
+		return err
+	} else {
+		return c.NoContent(http.StatusOK)
+	}
 }
 
 // PasswordReset パスワードリセットを行う

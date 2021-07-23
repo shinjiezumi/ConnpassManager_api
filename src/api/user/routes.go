@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/labstack/echo/v4"
+
+	"connpass-manager/common/request"
 )
 
 const apiCategory = "user"
@@ -11,6 +13,8 @@ const apiVersion = "v1"
 
 // SetupRoutes ユーザー系APIのルーティングをセットアップする
 func SetupRoutes(e *echo.Echo) {
+	e.Validator = request.NewValidator()
+
 	r := e.Group(fmt.Sprintf("/%s/%s", apiVersion, apiCategory))
 
 	r.POST("/login", Login)
