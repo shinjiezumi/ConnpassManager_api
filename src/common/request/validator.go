@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
+
+	cmerr "connpass-manager/common/error"
 )
 
 // CustomValidator .
@@ -22,7 +24,15 @@ func NewValidator() echo.Validator {
 // Validate .
 func (v CustomValidator) Validate(i interface{}) error {
 	if err := v.validator.Struct(i); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		details := make([]cmerr.Detail, 0, len(err.(validator.ValidationErrors)))
+		for _, err := range err.(validator.ValidationErrors) {
+			details = append(details, cmerr.Detail{
+				// FIXME 必要に応じて丁寧に出す
+				Field:   err.Field(),
+				Message: err.Tag(),
+			})
+		}
+		return cmerr.NewValidationError(http.StatusBadRequest, details)
 	}
 
 	return nil
