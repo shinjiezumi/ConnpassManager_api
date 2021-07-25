@@ -4,9 +4,9 @@ import "encoding/json"
 
 // ValidationError バリデーションエラー
 type ValidationError struct {
-	Code    int
-	Type    Type
-	Details []Detail
+	Code    int      // ステータスコード
+	Type    Type     // エラー種別
+	Details []Detail // エラー詳細
 }
 
 // Error .
@@ -21,8 +21,8 @@ func (v ValidationError) Error() string {
 
 // Detail エラー詳細
 type Detail struct {
-	Field   string
-	Message string
+	Field   string // エラー項目
+	Message string // エラーメッセージ。現状タグのみ
 }
 
 // NewValidationError バリデーションエラーを生成する
