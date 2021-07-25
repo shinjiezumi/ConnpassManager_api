@@ -1,9 +1,13 @@
 package user
 
 import (
-	"fmt"
+	"net/http"
 
 	"gorm.io/gorm"
+
+	cmerr "connpass-manager/common/error"
+	"connpass-manager/db"
+	"connpass-manager/domain/user"
 )
 
 // RegisterRequest ユーザー登録リクエスト
@@ -26,7 +30,19 @@ func NewRegisterUseCase(db *gorm.DB) *RegisterUseCase {
 
 // Execute ユーザー登録を実行する
 func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
-	// TODO 実装する
-	fmt.Println(req)
+	repo := user.NewRepository(db.GetConnection())
+	exists, err := repo.GetByEmail(req.Email)
+	if err != nil {
+		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
+	} else if exists != nil {
+		return cmerr.NewApplicationError(http.StatusConflict, "既に使用されているメールアドレスです")
+	}
+
+	// ユーザー登録する
+	u := user.NewUser(req.Email, req.Password)
+	if err := repo.Create(u); err != nil {
+		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
+	}
+
 	return nil
 }
