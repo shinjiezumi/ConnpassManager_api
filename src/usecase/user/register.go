@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 
 	cmerr "connpass-manager/common/error"
+	"connpass-manager/common/general"
 	"connpass-manager/db"
 	"connpass-manager/domain/user"
 )
@@ -30,8 +31,10 @@ func NewRegisterUseCase(db *gorm.DB) *RegisterUseCase {
 
 // Execute ユーザー登録を実行する
 func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
+	encryptedAddr := general.NewCryptString(req.Email)
+
 	repo := user.NewRepository(db.GetConnection())
-	exists, err := repo.GetByEmail(req.Email)
+	exists, err := repo.GetByEmail(encryptedAddr)
 	if err != nil {
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	} else if exists != nil {
@@ -39,7 +42,7 @@ func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
 	}
 
 	// ユーザー登録する
-	u := user.NewUser(req.Email, req.Password)
+	u := user.NewUser(encryptedAddr, req.Password)
 	if err := repo.Create(u); err != nil {
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	}

@@ -4,6 +4,8 @@ import (
 	"errors"
 
 	"gorm.io/gorm"
+
+	"connpass-manager/common/general"
 )
 
 // Repository ユーザーリポジトリ
@@ -19,7 +21,7 @@ func NewRepository(db *gorm.DB) *Repository {
 }
 
 // GetByEmail メールアドレスで取得する
-func (r *Repository) GetByEmail(email string) (*User, error) {
+func (r *Repository) GetByEmail(email general.CryptString) (*User, error) {
 	var ret User
 
 	if err := r.db.Where("email = ?", email).First(&ret).Error; err != nil {
