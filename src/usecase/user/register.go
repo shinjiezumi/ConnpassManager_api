@@ -31,8 +31,10 @@ func NewRegisterUseCase(db *gorm.DB) *RegisterUseCase {
 
 // Execute ユーザー登録を実行する
 func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
+	// 暗号化
 	encryptedAddr := general.NewCryptString(req.Email)
 
+	// 重複チェック
 	repo := user.NewRepository(db.GetConnection())
 	exists, err := repo.GetByEmail(encryptedAddr)
 	if err != nil {
