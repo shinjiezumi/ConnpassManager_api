@@ -13,6 +13,7 @@ import (
 
 // RegisterRequest ユーザー登録リクエスト
 type RegisterRequest struct {
+	Name     string `json:"name" validate:"required,max=255"`
 	Email    string `json:"email" validate:"required,email,max=255"`
 	Password string `json:"password" validate:"required,max=255"`
 }
@@ -44,7 +45,7 @@ func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
 	}
 
 	// ユーザー登録する
-	u := user.NewUser(encryptedAddr, req.Password)
+	u := user.NewUser(req.Name, encryptedAddr, req.Password)
 	if err := repo.Create(u); err != nil {
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	}

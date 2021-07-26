@@ -9,7 +9,7 @@ import (
 // User ユーザー
 type User struct {
 	ID              int                 `gorm:"primaryKey"` // ユーザーID
-	Name            *string             // ユーザー名
+	Name            string              // ユーザー名
 	Email           general.CryptString // メールアドレス(暗号化)
 	EmailVerifiedAt *string             // メールアドレス認証日時
 	Password        string              // パスワード
@@ -24,8 +24,9 @@ func (u *User) TableName() string {
 }
 
 // NewUser ユーザーを生成する
-func NewUser(email general.CryptString, password string) *User {
+func NewUser(name string, email general.CryptString, password string) *User {
 	return &User{
+		Name:     name,
 		Email:    email,
 		Password: password,
 	}
