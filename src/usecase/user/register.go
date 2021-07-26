@@ -34,6 +34,8 @@ func NewRegisterUseCase(db *gorm.DB) *RegisterUseCase {
 func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
 	// 暗号化
 	encryptedAddr := general.NewCryptString(req.Email)
+	// ハッシュ化
+	hashPassword := general.NewHashString(req.Password)
 
 	// 重複チェック
 	repo := user.NewRepository(db.GetConnection())
@@ -45,7 +47,7 @@ func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
 	}
 
 	// ユーザー登録する
-	u := user.NewUser(req.Name, encryptedAddr, req.Password)
+	u := user.NewUser(req.Name, encryptedAddr, hashPassword)
 	if err := repo.Create(u); err != nil {
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	}

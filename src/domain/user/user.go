@@ -12,7 +12,7 @@ type User struct {
 	Name            string              // ユーザー名
 	Email           general.CryptString // メールアドレス(暗号化)
 	EmailVerifiedAt *string             // メールアドレス認証日時
-	Password        string              // パスワード
+	Password        general.HashString  // パスワード
 	RememberToken   *string             // パスワード再設定トークン
 	CreatedAt       time.Time           // 作成日時
 	UpdatedAt       time.Time           // 更新日時
@@ -24,7 +24,7 @@ func (u *User) TableName() string {
 }
 
 // NewUser ユーザーを生成する
-func NewUser(name string, email general.CryptString, password string) *User {
+func NewUser(name string, email general.CryptString, password general.HashString) *User {
 	return &User{
 		Name:     name,
 		Email:    email,
