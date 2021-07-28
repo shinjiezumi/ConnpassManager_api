@@ -9,7 +9,7 @@ type ApplicationError struct {
 	Message string // エラーメッセージ
 }
 
-// Error .
+// Error エラーメッセージを返す
 func (a ApplicationError) Error() string {
 	j, err := json.Marshal(a)
 	if err != nil {

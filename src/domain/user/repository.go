@@ -13,7 +13,7 @@ type Repository struct {
 	db *gorm.DB
 }
 
-// NewRepository .
+// NewRepository ユーザーリポジトリを生成する
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
 		db: db,

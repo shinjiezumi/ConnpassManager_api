@@ -18,7 +18,7 @@ type User struct {
 	UpdatedAt       time.Time           // 更新日時
 }
 
-// TableName テーブル名
+// TableName テーブル名を返す
 func (u *User) TableName() string {
 	return "users"
 }

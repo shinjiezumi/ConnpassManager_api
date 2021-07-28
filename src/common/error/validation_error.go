@@ -9,7 +9,7 @@ type ValidationError struct {
 	Details []Detail // エラー詳細
 }
 
-// Error .
+// Error エラーメッセージを返す
 func (v ValidationError) Error() string {
 	j, err := json.Marshal(v)
 	if err != nil {

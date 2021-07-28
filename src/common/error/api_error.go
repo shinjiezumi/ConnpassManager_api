@@ -6,14 +6,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// APIError .
+// APIError APIエラー
 type APIError struct {
 	Type    Type      `json:"type"`
 	Message *string   `json:"message,omitempty"`
 	Details *[]Detail `json:"details,omitempty"`
 }
 
-// CustomHTTPErrorHandler .
+// CustomHTTPErrorHandler エラーハンドラー
 func CustomHTTPErrorHandler(err error, c echo.Context) {
 	var t Type
 	var code = http.StatusInternalServerError
