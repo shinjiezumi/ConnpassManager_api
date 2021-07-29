@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"connpass-manager/api/user"
+	"connpass-manager/common/session"
 	"connpass-manager/config"
 	"connpass-manager/db"
 	"connpass-manager/logger"
@@ -21,16 +22,7 @@ const apiPort = 1323
 func main() {
 	e := echo.New()
 
-	if err := godotenv.Load(".env"); err != nil {
-		panic("load env file failed")
-	}
-
-	// アクセスログの設定
-	logger.Setup(e)
-	e.Use(middleware.Recover())
-
-	// データベースセットアップ
-	db.Initialize()
+	initialize(e)
 
 	// ROOT
 	e.GET("/", func(c echo.Context) error {
@@ -42,4 +34,20 @@ func main() {
 	log.Println(fmt.Sprintf("start api at %s env", config.GetAppEnv()))
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", apiPort)))
+}
+
+func initialize(e *echo.Echo) {
+	if err := godotenv.Load(".env"); err != nil {
+		panic("load env file failed")
+	}
+
+	// アクセスログの設定
+	logger.Setup(e)
+	e.Use(middleware.Recover())
+
+	// データベース初期化
+	db.Initialize()
+
+	// セッション初期化
+	session.Initialize(e)
 }
