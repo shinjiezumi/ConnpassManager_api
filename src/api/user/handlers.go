@@ -30,7 +30,7 @@ func Register(c echo.Context) error {
 	}
 
 	// ユースケース実行
-	if err := user.NewRegisterUseCase(db.GetConnection()).Execute(req); err != nil {
+	if err := user.NewRegisterUseCase(db.GetConnection()).Execute(c, req); err != nil {
 		return err
 	} else {
 		return c.NoContent(http.StatusOK)

@@ -3,10 +3,12 @@ package user
 import (
 	"net/http"
 
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
 	cmerr "connpass-manager/common/error"
 	"connpass-manager/common/general"
+	"connpass-manager/common/session"
 	"connpass-manager/db"
 	"connpass-manager/domain/user"
 )
@@ -31,7 +33,7 @@ func NewRegisterUseCase(db *gorm.DB) *RegisterUseCase {
 }
 
 // Execute ユーザー登録を実行する
-func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
+func (uc *RegisterUseCase) Execute(c echo.Context, req *RegisterRequest) error {
 	// 暗号化
 	encryptedAddr := general.NewCryptString(req.Email)
 	// ハッシュ化
@@ -51,6 +53,8 @@ func (uc *RegisterUseCase) Execute(req *RegisterRequest) error {
 	if err := repo.Create(u); err != nil {
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	}
+
+	session.SaveUserID(c, u.ID)
 
 	return nil
 }
