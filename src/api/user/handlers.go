@@ -11,7 +11,20 @@ import (
 
 // Login ログイン処理を行う
 func Login(c echo.Context) error {
-	return c.String(http.StatusOK, "Login")
+	req := new(user.LoginRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	// ユースケース実行
+	if err := user.NewLoginUseCase(db.GetConnection()).Execute(c, req); err != nil {
+		return err
+	} else {
+		return c.NoContent(http.StatusOK)
+	}
 }
 
 // Logout ログアウト処理を行う
