@@ -59,3 +59,12 @@ func (r *Repository) Create(u *User) error {
 
 	return nil
 }
+
+// Save ユーザーを保存する
+func (r *Repository) Save(u *User) error {
+	if err := r.db.Save(u).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

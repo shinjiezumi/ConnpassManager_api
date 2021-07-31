@@ -50,6 +50,23 @@ func Register(c echo.Context) error {
 	}
 }
 
+// PasswordResetRequest パスワードリセットメールを送信する
+func PasswordResetRequest(c echo.Context) error {
+	req := new(user.PasswordResetRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	if err := user.NewPasswordResetUseCase(db.GetConnection()).Execute(req); err != nil {
+		return err
+	} else {
+		return c.NoContent(http.StatusOK)
+	}
+}
+
 // PasswordReset パスワードリセットを行う
 func PasswordReset(c echo.Context) error {
 	return c.String(http.StatusOK, "PasswordReset")

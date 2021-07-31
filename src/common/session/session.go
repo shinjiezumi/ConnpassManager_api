@@ -11,7 +11,7 @@ import (
 const (
 	sessionName       = "cm_user"
 	sessionKeyUserID  = "user_id"
-	sessionExpiryDate = 180 * 86400
+	sessionExpiryDate = 180 * 86400 // 180日
 )
 
 // Initialize 初期化する
