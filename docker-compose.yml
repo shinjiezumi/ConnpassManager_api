@@ -40,3 +40,7 @@ services:
       MYSQL_DATABASE: connpass_manager
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Tokyo
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
