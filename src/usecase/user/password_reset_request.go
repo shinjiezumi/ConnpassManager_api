@@ -47,7 +47,7 @@ func (uc *PasswordResetUseCase) Execute(req *PasswordResetRequest) error {
 	}
 
 	// トークン生成＋DB保存
-	token := vo.NewPasswordResetToken()
+	token := vo.NewPasswordResetToken(req.Email)
 	u.SetPasswordResetToken(token)
 	tx := db.GetConnection().Begin()
 	if err := user.NewRepository(tx).Save(u); err != nil {
