@@ -1,14 +1,18 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"gorm.io/gorm"
 
 	cmerr "connpass-manager/common/error"
 	"connpass-manager/common/general"
+	cmmail "connpass-manager/common/mail"
+	"connpass-manager/config"
 	"connpass-manager/db"
 	"connpass-manager/domain/user"
+	"connpass-manager/domain/vo"
 )
 
 // PasswordResetRequest パスワード再設定リクエスト
@@ -42,20 +46,34 @@ func (uc *PasswordResetUseCase) Execute(req *PasswordResetRequest) error {
 		return cmerr.NewApplicationError(http.StatusBadRequest, "メールアドレスが誤っています")
 	}
 
-	token := general.NewPasswordResetToken()
+	// トークン生成＋DB保存
+	token := vo.NewPasswordResetToken()
 	u.SetPasswordResetToken(token)
-
 	tx := db.GetConnection().Begin()
 	if err := user.NewRepository(tx).Save(u); err != nil {
 		tx.Rollback()
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	}
 
-	// TODO メール送信
+	// メール送信
+	if err := uc.sendPasswordResetMail(u.Email, token); err != nil {
+		tx.Rollback()
+		panic(err)
+	}
 
-	if err := tx.Commit(); err != nil {
+	if err := tx.Commit().Error; err != nil {
 		return cmerr.NewApplicationError(http.StatusInternalServerError, "エラーが発生しました")
 	}
 
 	return nil
+}
+
+func (uc *PasswordResetUseCase) sendPasswordResetMail(email general.CryptString, token vo.PasswordResetToken) error {
+	toList := []string{email.Decrypt()}
+	subject := "パスワード再設定"
+	template := "パスワードの再設定は以下URLページより、%d分以内に行ってください。\n %s"
+	passwordResetURL := fmt.Sprintf("%s/password_reset?token=%s", config.GetAppURL(), token)
+	body := fmt.Sprintf(template, vo.TokenExpiryMinute, passwordResetURL)
+
+	return cmmail.NewSender().SendTextMail(toList, subject, body)
 }

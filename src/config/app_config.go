@@ -24,3 +24,12 @@ func GetAppEnv() AppEnv {
 	}
 	return AppEnv(env)
 }
+
+// GetAppURL アプリケーションのURLを返す
+func GetAppURL() string {
+	url := os.Getenv("APP_URL")
+	if url == "" {
+		panic("APP_URLが設定されていません")
+	}
+	return url
+}
