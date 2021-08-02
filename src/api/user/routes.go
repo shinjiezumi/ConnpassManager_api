@@ -24,7 +24,7 @@ func SetupRoutes(e *echo.Echo) {
 	r.POST("/login", Login)
 	r.POST("/logout", Logout)
 	r.POST("/register", Register)
-	r.POST("/password_reset_request", PasswordResetRequest)
+	r.POST("/forgot_password", ForgotPassword)
 	r.POST("/password_reset", PasswordReset)
 	r.POST("/withdraw", Withdraw)
 }

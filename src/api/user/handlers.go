@@ -50,9 +50,9 @@ func Register(c echo.Context) error {
 	}
 }
 
-// PasswordResetRequest パスワードリセットメールを送信する
-func PasswordResetRequest(c echo.Context) error {
-	req := new(user.PasswordResetRequest)
+// ForgotPassword パスワードリセットメールを送信する
+func ForgotPassword(c echo.Context) error {
+	req := new(user.ForgotPasswordRequest)
 	if err := c.Bind(req); err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func PasswordResetRequest(c echo.Context) error {
 		return err
 	}
 
-	if err := user.NewPasswordResetUseCase(db.GetConnection()).Execute(req); err != nil {
+	if err := user.NewForgotPasswordUseCase(db.GetConnection()).Execute(req); err != nil {
 		return err
 	} else {
 		return c.NoContent(http.StatusOK)

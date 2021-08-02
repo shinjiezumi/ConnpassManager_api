@@ -15,25 +15,25 @@ import (
 	"connpass-manager/domain/vo"
 )
 
-// PasswordResetRequest パスワード再設定リクエスト
-type PasswordResetRequest struct {
+// ForgotPasswordRequest パスワード再設定要求リクエスト
+type ForgotPasswordRequest struct {
 	Email string `json:"email" validate:"required,email,max=255"`
 }
 
-// PasswordResetUseCase パスワード再設定ユースケース
-type PasswordResetUseCase struct {
+// ForgotPasswordUseCase パスワード再設定要求ユースケース
+type ForgotPasswordUseCase struct {
 	db *gorm.DB
 }
 
-// NewPasswordResetUseCase パスワード再設定ユースケースを生成する
-func NewPasswordResetUseCase(db *gorm.DB) *PasswordResetUseCase {
-	return &PasswordResetUseCase{
+// NewForgotPasswordUseCase パスワード再設定要求ユースケースを生成する
+func NewForgotPasswordUseCase(db *gorm.DB) *ForgotPasswordUseCase {
+	return &ForgotPasswordUseCase{
 		db: db,
 	}
 }
 
-// Execute パスワード再設定を実行する
-func (uc *PasswordResetUseCase) Execute(req *PasswordResetRequest) error {
+// Execute パスワード再設定要求を実行する
+func (uc *ForgotPasswordUseCase) Execute(req *ForgotPasswordRequest) error {
 	// 暗号化
 	encryptedAddr := general.NewCryptString(req.Email)
 
@@ -68,7 +68,7 @@ func (uc *PasswordResetUseCase) Execute(req *PasswordResetRequest) error {
 	return nil
 }
 
-func (uc *PasswordResetUseCase) sendPasswordResetMail(email general.CryptString, token vo.PasswordResetToken) error {
+func (uc *ForgotPasswordUseCase) sendPasswordResetMail(email general.CryptString, token vo.PasswordResetToken) error {
 	toList := []string{email.Decrypt()}
 	subject := "パスワード再設定"
 	template := "パスワードの再設定は以下URLページより、%d分以内に行ってください。\n %s"
