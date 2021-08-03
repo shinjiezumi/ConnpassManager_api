@@ -35,14 +35,19 @@ func (p *PasswordResetToken) GetEmail() general.CryptString {
 	return general.NewCryptString(email)
 }
 
-// IsExpired トークン期限が切れているかを返す
-func (p *PasswordResetToken) IsExpired() bool {
+// GetExpiryDate トークンから有効期限を返す
+func (p *PasswordResetToken) GetExpiryDate() time.Time {
 	decrypted := general.CryptString(*p).Decrypt()
 	expiryDate, err := time.Parse(date.DefaultFormat, strings.Split(decrypted, separator)[2])
 	if err != nil {
 		panic(err)
 	}
-	return time.Now().Before(expiryDate)
+	return expiryDate
+}
+
+// IsExpired トークン期限が切れているかを返す
+func (p *PasswordResetToken) IsExpired() bool {
+	return time.Now().After(p.GetExpiryDate())
 }
 
 func generateToken(email string) string {

@@ -69,7 +69,19 @@ func ForgotPassword(c echo.Context) error {
 
 // PasswordReset パスワードリセットを行う
 func PasswordReset(c echo.Context) error {
-	return c.String(http.StatusOK, "PasswordReset")
+	req := new(user.PasswordResetRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	if err := user.NewPasswordResetUseCase(db.GetConnection()).Execute(c, req); err != nil {
+		return err
+	} else {
+		return c.NoContent(http.StatusOK)
+	}
 }
 
 // Withdraw 退会処理を行う

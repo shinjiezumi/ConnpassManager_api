@@ -37,3 +37,9 @@ func NewUser(name string, email general.CryptString, password general.HashString
 func (u *User) SetPasswordResetToken(token vo.PasswordResetToken) {
 	u.RememberToken = &token
 }
+
+// ResetPassword パスワードをリセットする
+func (u *User) ResetPassword(newPassword general.HashString) {
+	u.Password = newPassword
+	u.RememberToken = nil
+}
