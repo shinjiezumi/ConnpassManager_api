@@ -41,3 +41,22 @@ func SaveUserID(c echo.Context, userID int) {
 		panic(err)
 	}
 }
+
+// Destroy セッションを破棄する
+func Destroy(c echo.Context) {
+	sess, err := session.Get(sessionName, c)
+	if err != nil {
+		panic(err)
+	}
+	sess.Options = &sessions.Options{
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	}
+	sess.Values[sessionKeyUserID] = ""
+
+	err = sess.Save(c.Request(), c.Response())
+	if err != nil {
+		panic(err)
+	}
+}

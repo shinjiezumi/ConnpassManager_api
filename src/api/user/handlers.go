@@ -29,7 +29,12 @@ func Login(c echo.Context) error {
 
 // Logout ログアウト処理を行う
 func Logout(c echo.Context) error {
-	return c.String(http.StatusOK, "Logout")
+	// ユースケース実行
+	if err := user.NewLogoutUseCase(db.GetConnection()).Execute(c); err != nil {
+		return err
+	} else {
+		return c.NoContent(http.StatusOK)
+	}
 }
 
 // Register 会員登録を行う
