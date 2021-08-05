@@ -91,5 +91,9 @@ func PasswordReset(c echo.Context) error {
 
 // Withdraw 退会処理を行う
 func Withdraw(c echo.Context) error {
-	return c.String(http.StatusOK, "Withdraw")
+	if err := user.NewWithdrawUseCase(db.GetConnection()).Execute(c); err != nil {
+		return err
+	} else {
+		return c.NoContent(http.StatusOK)
+	}
 }
