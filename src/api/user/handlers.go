@@ -5,6 +5,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	cmerr "connpass-manager/common/error"
+	"connpass-manager/common/session"
 	"connpass-manager/db"
 	"connpass-manager/usecase/user"
 )
@@ -91,7 +93,11 @@ func PasswordReset(c echo.Context) error {
 
 // Withdraw 退会処理を行う
 func Withdraw(c echo.Context) error {
-	if err := user.NewWithdrawUseCase(db.GetConnection()).Execute(c); err != nil {
+	userID := session.GetUserID(c)
+	if userID == nil {
+		return cmerr.NewApplicationError(http.StatusInternalServerError, "ログインしていません")
+	}
+	if err := user.NewWithdrawUseCase(db.GetConnection()).Execute(*userID); err != nil {
 		return err
 	} else {
 		return c.NoContent(http.StatusOK)

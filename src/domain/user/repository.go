@@ -20,6 +20,20 @@ func NewRepository(db *gorm.DB) *Repository {
 	}
 }
 
+// GetByID ユーザーIDで取得する
+func (r *Repository) GetByID(userID int) (*User, error) {
+	var ret User
+
+	if err := r.db.Where("id = ?", userID).First(&ret).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &ret, nil
+}
+
 // GetByEmail メールアドレスで取得する
 func (r *Repository) GetByEmail(email general.CryptString) (*User, error) {
 	var ret User
@@ -63,6 +77,15 @@ func (r *Repository) Create(u *User) error {
 // Save ユーザーを保存する
 func (r *Repository) Save(u *User) error {
 	if err := r.db.Save(u).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Delete ユーザーを削除する
+func (r *Repository) Delete(u *User) error {
+	if err := r.db.Delete(u).Error; err != nil {
 		return err
 	}
 

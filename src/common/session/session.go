@@ -23,6 +23,21 @@ func Initialize(e *echo.Echo) {
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(sessionKey))))
 }
 
+// GetUserID ユーザーIDを取得する
+func GetUserID(c echo.Context) *int {
+	sess, err := session.Get(sessionName, c)
+	if err != nil {
+		panic(err)
+	}
+
+	if userID, ok := sess.Values[sessionKeyUserID]; !ok {
+		return nil
+	} else {
+		ret := userID.(int)
+		return &ret
+	}
+}
+
 // SaveUserID ユーザーIDを保存する
 func SaveUserID(c echo.Context, userID int) {
 	sess, err := session.Get(sessionName, c)
