@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"connpass-manager/api/connpass"
 	"connpass-manager/api/user"
 	"connpass-manager/common/session"
 	"connpass-manager/config"
@@ -30,6 +31,7 @@ func main() {
 	})
 
 	user.SetupRoutes(e)
+	connpass.SetupRoutes(e)
 
 	log.Println(fmt.Sprintf("start api at %s env", config.GetAppEnv()))
 
@@ -44,9 +46,9 @@ func initialize(e *echo.Echo) {
 	// アクセスログの設定
 	logger.Setup(e)
 	e.Use(middleware.Recover())
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		CookieHTTPOnly: true,
-	}))
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	CookieHTTPOnly: true,
+	//}))
 
 	// データベース初期化
 	db.Initialize()
