@@ -30,6 +30,7 @@ func main() {
 		return c.String(http.StatusOK, "connpass-manager")
 	})
 
+	// ルーティングの設定
 	user.SetupRoutes(e)
 	connpass.SetupRoutes(e)
 

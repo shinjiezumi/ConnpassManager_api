@@ -27,7 +27,7 @@ type Searcher struct {
 	URL string
 }
 
-// Search .
+// Search connpassイベントを検索する
 func (s *Searcher) Search(keyword string, page, count int) ([]*Event, error) {
 	u, err := s.makeURL(keyword, page, count)
 	if err != nil {
@@ -74,6 +74,7 @@ func (s *Searcher) makeURL(keyword string, page, count int) (*url.URL, error) {
 	return u, nil
 }
 
+// APIレスポンスを生成する
 func (s *Searcher) makeResponse(res *http.Response) ([]*Event, error) {
 	defer func() {
 		if err := res.Body.Close(); err != nil {
