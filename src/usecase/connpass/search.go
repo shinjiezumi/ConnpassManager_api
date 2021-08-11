@@ -7,13 +7,14 @@ import (
 
 	cmerr "connpass-manager/common/error"
 	"connpass-manager/domain/connpass"
+	"connpass-manager/domain/connpass/api"
 )
 
 // SearchRequest 検索リクエスト
 type SearchRequest struct {
-	Keyword string `json:"keyword" validate:"required"`
-	Page    int    `json:"page" validate:"required"`
-	Count   int    `json:"count" validate:"required,min=1,max=100"`
+	Condition api.EventSearchQuery `json:"condition" validate:"required"`
+	Page      int                  `validate:"required"`
+	Count     int                  `validate:"required"`
 }
 
 // SearchResponse 検索レスポンス
@@ -36,7 +37,7 @@ func NewSearchUseCase(db *gorm.DB) *SearchUseCase {
 
 // Execute .
 func (uc *SearchUseCase) Execute(req *SearchRequest) (*SearchResponse, error) {
-	events, err := connpass.NewSearcher().Search(req.Keyword, req.Page, req.Count)
+	events, err := connpass.NewSearcher().Search(req.Condition, req.Page, req.Count)
 	if err != nil {
 		return nil, cmerr.NewApplicationError(http.StatusInternalServerError, "検索に失敗しました")
 	}

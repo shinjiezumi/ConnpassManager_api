@@ -12,7 +12,7 @@ import (
 
 // ISearcher .
 type ISearcher interface {
-	Search(keyword string, page, count int) ([]*Event, error)
+	Search(condition api.EventSearchQuery, page, count int) ([]*Event, error)
 }
 
 // NewSearcher .
@@ -28,8 +28,8 @@ type Searcher struct {
 }
 
 // Search connpassイベントを検索する
-func (s *Searcher) Search(keyword string, page, count int) ([]*Event, error) {
-	u, err := s.makeURL(keyword, page, count)
+func (s *Searcher) Search(condition api.EventSearchQuery, page, count int) ([]*Event, error) {
+	u, err := s.makeURL(condition, page, count)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (s *Searcher) Search(keyword string, page, count int) ([]*Event, error) {
 }
 
 // 検索URLを生成する
-func (s *Searcher) makeURL(keyword string, page, count int) (*url.URL, error) {
+func (s *Searcher) makeURL(c api.EventSearchQuery, page, count int) (*url.URL, error) {
 	// URL生成
 	u, err := url.Parse(s.URL)
 	if err != nil {
@@ -65,7 +65,31 @@ func (s *Searcher) makeURL(keyword string, page, count int) (*url.URL, error) {
 
 	// クエリ生成
 	q := u.Query()
-	q.Set("keyword", keyword)
+	if c.EventID != nil {
+		q.Set("event_id", strconv.Itoa(*c.EventID))
+	}
+	if c.Keyword != nil {
+		q.Set("keyword", *c.Keyword)
+	}
+	if c.KeywordOr != nil {
+		q.Set("keyword_or", *c.Keyword)
+	}
+	if c.Ym != nil {
+		q.Set("ym", strconv.Itoa(*c.Ym))
+	}
+	if c.Ymd != nil {
+		q.Set("ymd", strconv.Itoa(*c.Ymd))
+	}
+	if c.NickName != nil {
+		q.Set("nickname", *c.NickName)
+	}
+	if c.OwnerNickname != nil {
+		q.Set("owner_nickname", *c.OwnerNickname)
+	}
+	if c.SeriesID != nil {
+		q.Set("series_id", strconv.Itoa(*c.SeriesID))
+	}
+
 	// 検索結果の何件目から出力するかを指定する。
 	q.Set("start", strconv.Itoa(1+((page-1)*count)))
 	q.Set("count", strconv.Itoa(count))

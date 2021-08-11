@@ -7,19 +7,19 @@ import "time"
 // EventSearchURL イベント検索ApiURL
 const EventSearchURL = "https://connpass.com/api/v1/event/"
 
-// EventQuery イベント検索クエリ
-type EventQuery struct {
+// EventSearchQuery イベント検索クエリ
+type EventSearchQuery struct {
 	EventID       *int    `json:"event_id"`       // イベントID
 	Keyword       *string `json:"keyword"`        // キーワード(AND)
 	KeywordOr     *string `json:"keyword_or"`     // キーワード(OR)
-	Ym            int     `json:"ym"`             // イベント開催年月
-	Ymd           int     `json:"ymd"`            // イベント開催年月日
-	NickName      string  `json:"nick_name"`      // 参加者のニックネーム
-	OwnerNickname string  `json:"owner_nickname"` // 管理者のニックネーム
-	SeriesID      int     `json:"series_id"`      // グループID
-	Start         int     `json:"start"`          // 検索の開始位置
-	Order         int     `json:"order"`          // 検索結果の表示順. 初期値:1、1:更新日時順、2:開催日時順、3:新着順
-	Count         int     `json:"count"`          // 取得件数. 初期値:10、最小値:1、最大値:100
+	Ym            *int    `json:"ym"`             // イベント開催年月
+	Ymd           *int    `json:"ymd"`            // イベント開催年月日
+	NickName      *string `json:"nick_name"`      // 参加者のニックネーム
+	OwnerNickname *string `json:"owner_nickname"` // 管理者のニックネーム
+	SeriesID      *int    `json:"series_id"`      // グループID
+	Start         int     `json:"-"`              // 検索の開始位置
+	Order         *int    `json:"order"`          // 検索結果の表示順. 初期値:1、1:更新日時順、2:開催日時順、3:新着順
+	Count         int     `json:"-"`              // 取得件数. 初期値:10、最小値:1、最大値:100
 }
 
 // EventResponse イベント検索レスポンス
