@@ -21,5 +21,5 @@ func SetupRoutes(e *echo.Echo) {
 	// ルーティング設定
 	r := e.Group(fmt.Sprintf("/%s/%s", apiVersion, apiCategory))
 
-	r.POST("/search", Search)
+	r.GET("/search", Search)
 }
