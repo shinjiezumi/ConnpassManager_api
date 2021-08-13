@@ -29,8 +29,16 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 		t = ee.Type
 		code = ee.Code
 		message = &ee.Message
+	} else if ee, ok := err.(*echo.HTTPError); ok {
+		t = "Httpエラー"
+		code = ee.Code
+		errMsg := ee.Error()
+		message = &errMsg
+	} else {
+		t = "Generalエラー"
+		errMsg := "エラーが発生しました"
+		message = &errMsg
 	}
-
 	res := APIError{
 		Type:    t,
 		Message: message,
