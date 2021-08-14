@@ -13,8 +13,8 @@ import (
 // SearchRequest 検索リクエスト
 type SearchRequest struct {
 	Condition api.EventSearchQuery `json:"condition" validate:"required"`
-	Page      int                  `validate:"required"`
-	Count     int                  `validate:"required"`
+	Page      int                  `json:"page" validate:"required"`
+	Count     int                  `json:"count" validate:"required"`
 }
 
 // SearchResponse 検索レスポンス
