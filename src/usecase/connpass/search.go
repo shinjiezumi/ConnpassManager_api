@@ -20,7 +20,7 @@ type SearchRequest struct {
 // SearchResponse 検索レスポンス
 type SearchResponse struct {
 	Count  int               `json:"count"`
-	Events []*connpass.Event `json:"event"`
+	Events []*connpass.Event `json:"events"`
 }
 
 // SearchUseCase イベント検索ユースケース
