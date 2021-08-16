@@ -21,5 +21,6 @@ func SetupRoutes(e *echo.Echo) {
 	// ルーティング設定
 	r := e.Group(fmt.Sprintf("/%s/%s", apiVersion, apiCategory))
 
+	// connpassイベント検索
 	r.GET("/search", Search)
 }
