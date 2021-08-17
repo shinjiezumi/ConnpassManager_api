@@ -27,4 +27,7 @@ func SetupRoutes(e *echo.Echo) {
 	r.POST("/forgot_password", ForgotPassword)
 	r.POST("/password_reset", PasswordReset)
 	r.POST("/withdraw", Withdraw)
+
+	// FIXME 動作確認用で後で消す
+	r.POST("/sendmail", SendMail)
 }

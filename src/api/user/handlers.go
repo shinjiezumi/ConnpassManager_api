@@ -3,6 +3,8 @@ package user
 import (
 	"net/http"
 
+	cmmail "connpass-manager/common/mail"
+
 	"github.com/labstack/echo/v4"
 
 	cmerr "connpass-manager/common/error"
@@ -102,4 +104,28 @@ func Withdraw(c echo.Context) error {
 	} else {
 		return c.NoContent(http.StatusOK)
 	}
+}
+
+// SendMailRequest FIXME 後で消す
+type SendMailRequest struct {
+	Email   string `json:"email" validate:"required"`
+	Subject string `json:"subject" validate:"required,max=255"`
+	Body    string `json:"body" validate:"required,max=1024"`
+}
+
+func SendMail(c echo.Context) error {
+	req := new(SendMailRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	toList := []string{req.Email}
+	subject := req.Subject
+	body := req.Body
+
+	return cmmail.NewSender().SendTextMail(toList, subject, body)
+
 }
