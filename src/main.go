@@ -47,9 +47,9 @@ func initialize(e *echo.Echo) {
 	// アクセスログの設定
 	logger.Setup(e)
 	e.Use(middleware.Recover())
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		CookieHTTPOnly: true,
-	}))
+	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	//	CookieHTTPOnly: true,
+	//}))
 
 	// データベース初期化
 	db.Initialize()
