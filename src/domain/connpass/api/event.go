@@ -14,7 +14,7 @@ type EventSearchQuery struct {
 	KeywordOr     *string `json:"keyword_or"`     // キーワード(OR)
 	Ym            *int    `json:"ym"`             // イベント開催年月
 	Ymd           *int    `json:"ymd"`            // イベント開催年月日
-	NickName      *string `json:"nick_name"`      // 参加者のニックネーム
+	NickName      *string `json:"nickname"`       // 参加者のニックネーム
 	OwnerNickname *string `json:"owner_nickname"` // 管理者のニックネーム
 	SeriesID      *int    `json:"series_id"`      // グループID
 	Start         int     `json:"-"`              // 検索の開始位置
