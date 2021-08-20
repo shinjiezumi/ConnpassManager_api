@@ -41,7 +41,7 @@ type Event struct {
 	StartedAt        time.Time `json:"started_at"`         // イベント開催日時(ISO-8601形式)
 	EndedAt          time.Time `json:"ended_at"`           // イベント終了日時(ISO-8601形式)
 	Limit            int       `json:"limit"`              // 定員
-	EventType        EventType `json:"event_typ"`          // イベント参加タイプ
+	EventType        EventType `json:"event_type"`         // イベント参加タイプ
 	Series           Series    `json:"series"`             // グループ
 	Address          string    `json:"address"`            // 開催場所
 	Place            string    `json:"place"`              // 開催会場
@@ -52,7 +52,7 @@ type Event struct {
 	OwnerDisplayName string    `json:"owner_display_name"` // 管理者の表示名
 	Accepted         int       `json:"accepted"`           // 参加者数
 	Waiting          int       `json:"waiting"`            // 補欠者数
-	UpdateAt         time.Time `json:"update_at"`          // 更新日時(ISO-8601形式)
+	UpdateAt         time.Time `json:"updated_at"`         // 更新日時(ISO-8601形式)
 }
 
 // Series グループ
