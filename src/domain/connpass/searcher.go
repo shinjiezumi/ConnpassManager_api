@@ -90,7 +90,7 @@ func (s *Searcher) makeURL(c api.EventSearchQuery, page, count int) (*url.URL, e
 		q.Set("series_id", strconv.Itoa(*c.SeriesID))
 	}
 
-	// 検索結果の何件目から出力するかを指定する。
+	// 検索結果の何件目から出力するかを指定
 	q.Set("start", strconv.Itoa(1+((page-1)*count)))
 	q.Set("count", strconv.Itoa(count))
 	u.RawQuery = q.Encode()
