@@ -9,7 +9,10 @@ import (
 	"connpass-manager/common/request"
 )
 
+// APIカテゴリ
 const apiCategory = "connpass"
+
+// APIバージョン
 const apiVersion = "v1"
 
 // SetupRoutes イベント系APIのルーティングをセットアップする
