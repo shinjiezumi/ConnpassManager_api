@@ -52,14 +52,10 @@ jobs:
         working-directory: ./src
         run: go build -v ./...
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Create env file
         working-directory: ./src
         run: |
-          echo $CM_APP_ROOT
-          cp .env_example .env
+          cp .env.example .env
 
       - name: Test
         working-directory: ./src
