@@ -28,6 +28,7 @@ services:
       DB_NAME: connpass_manager
       DB_USER: root
       DB_PASSWORD: root
+      CM_APP_ROOT: /go/src
   db:
     build: docker/mysql
     ports:

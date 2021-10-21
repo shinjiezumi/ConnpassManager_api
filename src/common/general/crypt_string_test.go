@@ -1,6 +1,8 @@
 package general
 
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/joho/godotenv"
@@ -11,11 +13,18 @@ const (
 	encrypted = "pFvjxIozC-Y="
 )
 
-func TestNewCryptString(t *testing.T) {
-	if err := godotenv.Load("/go/src/.env"); err != nil {
-		panic("load env file failed")
+func init() {
+	appRoot := os.Getenv("CM_APP_ROOT")
+	if appRoot == "" {
+		panic("CM_APP_ROOT is empty")
 	}
 
+	if err := godotenv.Load(fmt.Sprintf("%s/.env", appRoot)); err != nil {
+		panic("load env file failed")
+	}
+}
+
+func TestNewCryptString(t *testing.T) {
 	type args struct {
 		str string
 	}
