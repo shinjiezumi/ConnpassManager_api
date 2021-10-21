@@ -17,6 +17,9 @@ jobs:
       DB_NAME: echodock
       DB_USER: root
       DB_PASSWORD: pass
+      CRYPT_KEY: 1234567890123456789012
+      CRYPT_IV: 1234567890123456
+      HASH_SALT: 1234567890123456
 
     services:
       db:
