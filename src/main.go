@@ -48,6 +48,7 @@ func initialize(e *echo.Echo) {
 	logger.Setup(e)
 	e.Use(middleware.Recover())
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "header:X-XSRF-TOKEN",
 		CookieHTTPOnly: true,
 	}))
 
