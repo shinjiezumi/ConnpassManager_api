@@ -25,9 +25,10 @@ services:
       TZ: Asia/Tokyo
       DBMS: mysql
       DB_PROTOCOL: tcp(db:3306)
-      DB_NAME: echodock
+      DB_NAME: connpass_manager
       DB_USER: root
       DB_PASSWORD: root
+      CM_APP_ROOT: /go/src
   db:
     build: docker/mysql
     ports:
@@ -40,3 +41,7 @@ services:
       MYSQL_DATABASE: connpass_manager
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Tokyo
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
